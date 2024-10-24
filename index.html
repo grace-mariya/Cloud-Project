@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Blog with Animations</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home" class="section">
+        <h1>Welcome to My Blog</h1>
+        <img src="images/home-banner.jpg" alt="Home Image" style="width: 300px; margin: 20px 0;">
+        <p>A space where I share my thoughts, ideas, and more.</p>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <h2>About Me</h2>
+        <img src="images/about-me.jpeg" alt="About Me" style="width: 200px; border-radius: 50%; margin-bottom: 20px;">
+        <p>I'm a passionate blogger sharing knowledge on various topics. This space is a reflection of my interests and experiences.</p>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="posts-container section">
+        <h2>Blog</h2>
+        <!-- Blog posts will be dynamically injected here -->
+    </section>
+
+    <!-- Create Post Section -->
+    <section id="createPost" class="section">
+        <h2>Create a new post</h2>
+        <textarea id="postContent" placeholder="Write something..."></textarea>
+        <input type="file" id="uploadImage" accept="image/*">
+        <button onclick="createPost()">Post</button>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2>Contact Me</h2>
+        <p>You can reach me at <a href="mailto:youremail@example.com">youremail@example.com</a>.</p>
+    </section>
+
+    <footer>
+        <p>© 2024 My Personal Blog. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Firebase and app scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>
