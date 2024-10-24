@@ -105,3 +105,47 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+.posts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.post {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.post img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.post-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-content h3 {
+    margin: 0;
+}
+
+.post-content p {
+    margin: 5px 0;
+}
+
+.delete-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
