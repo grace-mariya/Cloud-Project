@@ -25,7 +25,7 @@ function renderPosts() {
                 <h3>${post.title}</h3>
                 <p>${post.description}</p>
                 <p class="post-date">${post.date}</p>
-                <button class="delete-button" onclick="deletePost(${index})">Delete</button>
+                <button class="delete-button" onclick="deletePost('${post.id}', '${post.imageUrl}')">Delete</button>
             </div>
         </div>
         `;
@@ -77,18 +77,22 @@ function createPost() {
         function complete() {
             // Get the image URL once the upload is complete
             uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                // Create the blog post object with the image URL
+                // Create a new document reference (to get the ID before adding data)
+                const newPostRef = db.collection("blogPosts").doc();
+                
+                // Create the blog post object with the image URL and document ID
                 const newPost = {
+                    id: newPostRef.id,  // Add the document ID to the post data
                     title: "New Blog Post",
                     description: postContent,
                     imageUrl: downloadURL || "images/writer.jpg", // Use the uploaded image URL
                     date: currentDate
                 };
 
-                // Push the post data to Firebase Firestore
-                db.collection("blogPosts").add(newPost)
-                    .then((docRef) => {
-                        console.log("Document written with ID: ", docRef.id);
+                // Set the post data in Firestore using the generated document ID
+                newPostRef.set(newPost)
+                    .then(() => {
+                        console.log("Document written with ID: ", newPostRef.id);
                         document.getElementById('postContent').value = ''; // Clear textarea
                         fileInput.value = ''; // Clear the file input
                         loadPosts(); // Reload posts after creating a new one
@@ -112,24 +116,35 @@ function loadPosts() {
     });
 }
 
-// Function to delete a post from Firestore and re-render the posts
-function deletePost(index) {
-    const postToDelete = blogPosts[index];
+// Function to delete a post from Firestore and remove the associated image
+async function deletePost(document_id, image_URL) {
+    console.log("Image: "+ image_URL);
+    console.log("Doc ID: "+ document_id);
     
-    // Delete the post from Firestore using the title (or you can use a document ID if available)
-    db.collection("blogPosts")
-      .where("title", "==", postToDelete.title)
-      .get()
-      .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-              doc.ref.delete().then(() => {
-                  console.log("Document successfully deleted!");
-                  loadPosts(); // Reload the posts after deletion
-              }).catch((error) => {
-                  console.error("Error removing document: ", error);
-              });
-          });
-      });
+    if (!image_URL) {
+        console.error("imageUrl is undefined");
+        return; // Exit the function if imageUrl is undefined
+    }
+
+    // Now proceed with the split
+    const filePath = image_URL.split('/o/')[1].split('?')[0].replace(/%2F/g, '/');
+    
+    const ImageRef = storage.ref(filePath);
+    ImageRef.delete().then(() => {
+        console.log("Image Deleted: "+image_URL);
+    }).catch((error) => {
+        console.error('Error deleting from storage:', error);
+    });
+        
+    // Reference to the document in Firestore
+    const DocRef = db.collection("blogPosts").doc(document_id);
+    DocRef.delete().then(() => {
+        console.log("Data Deleted");
+    }).catch((error) => {
+        console.error('Error deleting from Firestore:', error);
+    });
+    
+    loadPosts(); 
 }
 
 // Call the function to load posts from Firebase Firestore on page load
